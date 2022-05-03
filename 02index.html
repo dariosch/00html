@@ -29,8 +29,17 @@
         <label for="sem2">Segunda semana </label>
         <input type="checkbox" id="sem3" name="sem3" value="Tercer Semana">
         <label for="sem3">Tercer semana</label><br><br>
-        <!-- Submit button-->
-        <input type="submit" value="Enviar">
+        <label for="pass1">Contrasena: </label><br>
+        <input type="password" id="pass1" name="pass1" placeholder="put your password here"><br><br>
+        <input type="button" value="alerta en navegador!" onclick="alert('Hello World!')"><br><br>
+        <label for="colorete">Selecciona el color preferido exacto: </label>
+        <input type="color" id="colorete"><br><br>
+        <label for="fechanac">Ingrese su fecha de nacimiento: </label>
+        <input type="date" id="fechanac"><br><br>
+        <label for="rango">Rango de numeros elegido de a 5 en 5</label>
+        <input type="range" min="0" max="100" step="5"><br>
+        <!-- Submit button--><br>
+        <input type="submit" value="Enviar"><input type="reset" value="Resetear">
     </form>
     
 </body>
