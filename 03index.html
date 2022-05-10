@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Agregamos CSS definiendo estilo de css interno al html, solo aplicable a ESTE archivo-->
+    <style>
+        body {background-color: whitesmoke;}
+        h2 {color:rebeccapurple;}
+    </style>
+    <!--Tambien podemos agregar estilos de css mediante un archivo css externo, reutilizable a muchos archivos html-->
+    <link rel="stylesheet" href="styles.css">
+    <title>HTML 3 - Un poco más avanzado aún</title>
+</head>
+<body>
+    <!--Agregando css a un solo elemento html con css inline-->
+    <h1 style="color:green;">GREEN Heading</h1>
+    <h2>Heading en h2, color heredado del intern style</h2>
+    <h3>Heading en h3, color y background heredado del extern style por css</h3>
+    <br>
+    <!--defino el alto de la imagen por atributo interno de img, y ademas le sumo un link que se abre en nueva pestana-->
+    <a href="https://somoscoco.ar" target="_blank"><img src="images/coco.png" alt="Logo de COCO" height="150px"></a>
+    <img src="images/fbicon.png" alt="Logo de FB" style="width: 100px;"> <!--defino el ancho de la imagen por atributo style-->
+</body>
+</html>
