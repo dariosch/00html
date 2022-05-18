@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Favicon agregado-->
+    <link rel="icon" type="image/x-icon" href="images/coco.png">
     <!--Agregamos CSS definiendo estilo de css interno al html, solo aplicable a ESTE archivo-->
     <style>
         body {background-color: whitesmoke;}
         h2 {color:rebeccapurple;}
+        h3 {background-image: url('images/fbicon.png'); background-repeat: no-repeat;}
     </style>
     <!--Tambien podemos agregar estilos de css mediante un archivo css externo, reutilizable a muchos archivos html-->
     <link rel="stylesheet" href="styles.css">
@@ -30,6 +33,27 @@
         <area shape="circle" coords="350,350,125" alt="area2" href="#">
     </map>
     <br>
+    <!--imagen de background con repeat y no repeat. podria hacerlo inline pero lo defini en un h3 en la etiqueta style dentro del head-->
+    <h3>
+        <pre>Background con el logo de fondo. 
+                Deberia ocupar lo maximo del pre 
+                y del p.
+            vamos mas abajo
+                vamos mas
+                    vamos mas
+                    vm
+                    vmv
+            vm
+        </pre>
+        Texto fuera del pre
+    </h3>
+    <br>
+    <p>Imagen responsiva. Si achicamos el browser se vera el logo de FB, usamos picture</p><br>
+    <picture>
+        <source media="(min-width:650px)" srcset="images/coco.png">
+        <source media="(min-width:450px)" srcset="images/fbicon.png">
+        <img src="images/coco.png">
+    </picture>
 
 </body>
 </html>
