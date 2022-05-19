@@ -2,3 +2,15 @@ h3{
     background-color: azure;
     color:black;
 }
+
+table, th, td {
+    border: 1px solid white;
+    border-collapse: collapse;
+    border-radius: 10px;
+  }
+  
+  th, td {
+    background-color: #96D4D4;
+  }
+
+  tr:hover {background-color: #D6EEEE;}
