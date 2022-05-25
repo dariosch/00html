@@ -52,10 +52,10 @@
     <picture>
         <source media="(min-width:650px)" srcset="images/coco.png">
         <source media="(min-width:450px)" srcset="images/fbicon.png">
-        <img src="images/coco.png">
+        <img src="images/coco.png"> <!--Siempre dejo un img como default en el caso de acceder desde navegadores no compatibles-->
     </picture>
     <br>
-    <!--TABLAS-->
+    <!--TABLAS. Le di estilo predefinido directamente desde el styles.css-->
     <table style="width:30%">
         <tr>
             <th style="width:70%">Nombre</th>
@@ -71,9 +71,28 @@
         </tr>
     </table>
     <br>
-    <!--iframe con el index 2, sin bordes y de 400px max-->
+    <!--iframe con el index 2, sin bordes y de 600px max. Agrego siempre un title para screen readers-->
     <h4>Index nro 2 en un iframe:</h4>
-    <iframe src="02index.html" title="Index nro 2" style="border:none; width:400px;"></iframe>
-    <br>
+    <iframe src="02index.html" title="Index nro 2" style="border:none; width:600px;"></iframe>
+    <br><br>
+    <!--Scripts para incluir codigo y editar lo necesario. Dejo un p Vacio con id "demo" para que se inserte lo descrito en el codigo ahi en cada boton-->
+    
+    <button type="button"
+        onclick="document.getElementById('demo').innerHTML = 'Hola mundillo!'">
+        Click to edit text</button>
+    <button type="button"
+        onclick="document.getElementById('demo').style.color = 'green'">
+        Click to colorize font on green</button>
+    <button type="button"
+        onclick="document.getElementById('demo').style.color = 'black'">
+        Click to colorize font on black</button>
+    <button type="button"
+        onclick="document.getElementById('demo').innerHTML = Date()">
+        Click to show actual date</button>
+      <noscript>Lamentablemente tu navegador no admite Javascript</noscript>
+    <p id="demo">Vacio</p>
+    <br><br>
+    
+
 </body>
 </html>
