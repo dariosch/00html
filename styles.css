@@ -14,3 +14,28 @@ table, th, td {
   }
 
   tr:hover {background-color: #D6EEEE;}
+
+  article {
+    float: left;
+    width: 70%;
+    padding: 20px;
+    background-color: #f1f1f1;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  nav {
+    float: left;
+    width: 30%;
+    background: #ccc;
+    padding: 20px;
+  }
+
+  /* Clear floats after the columns */
+section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
