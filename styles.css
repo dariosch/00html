@@ -24,8 +24,8 @@ table, th, td {
 
   * {
     box-sizing: border-box;
-  }
-
+   }
+  
   nav {
     float: left;
     width: 30%;
@@ -38,4 +38,38 @@ section::after {
   content: "";
   display: table;
   clear: both;
+}
+
+.left {
+  background-color: aquamarine;
+  float:left;
+  width:20%;
+  padding: 20px;
+}
+
+.right {
+  background-color: cadetblue;
+  float:left;
+  width:20%;
+  padding: 20px;
+}
+
+.main {
+  background-color: #ccc;
+  float:left;
+  width: 60%;
+  padding: 20px;
+}
+
+.titulo {
+  background-color: antiquewhite;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+@media screen and (max-width: 800px) {
+  .left, .right, .main {
+    width: 100%;
+  }
 }
