@@ -9,7 +9,7 @@
     <title>HTML 4 - Union con CSS</title>
 </head>
 <body>
-    <h1>Titulo de pagina de HTML + CSS 4</h1>
+    <h1>Titulo de pagina de HTML + CSS y algo de JS</h1>
     <section>
         <nav>
             <ol>
@@ -18,7 +18,7 @@
             </ol>
         </nav>
         <article>
-            Info a escribir 1.
+            El layout de esta seccion y la de al lado estan dimensionadas a traves de los atributos float y clear mediante el css styles.css asociado.
             Info a escribir 2.
             <pre>Info escrita con 
                 formato     predefinido.
@@ -26,8 +26,75 @@
             </pre>
         </article>
     </section>
+
+    <br>
+    <div class="titulo">
+        <p>Layout responsive con media query y clases via css:</p>
+    </div>
+    <div class="left">
+        <p>Texto de clase LEFT</p>
+    </div>
+    <div class="main">
+        <p>Texto de clase MAIN</p>
+    </div>
+    <div class="right">
+        <p>Texto de clase RIGHT</p>
+    </div>
+    
+
     <footer>
-        Informacion de footer al pie.
+        <br><br>
+        <p>Informacion de footer al pie, sin css por el momento. &#128512;</p>
+        <br>
+        <!--Usamos un codigo de JS para obtener algunos parametros de acuerdo al browser-->
+        <button onclick="getLocation()">
+            Click para obtener geolocalizacion</button>
+        <p id="demo"></p>
+
     </footer>
+<!--Funciones necesarias en este documento: para obtener la geolocalizacion, para formatear la posicion a mostrar, para manejar errores-->
+    <script>
+        var x = document.getElementById("demo");
+
+        function getLocation(){
+            if (navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            }
+            else x.innerHTML = "El navegador no admite geolocalizacion";
+            
+        }
+
+        function showPosition(position){
+            var y = "Latitud: " + position.coords.latitude + "<br>Longitud: " + position.coords.longitude;
+            
+            if (position.coords.altitude != null){
+                y += "<br>Altitud: "+ position.coords.altitude;
+            }
+            else y += "<br>Altitud no disponible";
+            if (position.coords.accuracy != null){
+                y += "<br>Precision: "+ position.coords.accuracy + " metros";
+            }
+            else y+= "<br>Precision no disponible";
+            x.innerHTML = y;
+        }
+
+        function showError(error){
+            switch(error.code){
+                case error.PERMISSION_DENIED:
+                    x.innerHTML = "El usuario denego la solicitud para obtener la geolocalizacion."
+                break;
+                case error.POSITION_UNAVAILABLE:
+                    x.innerHTML = "La informacion de geolocalizacion no esta disponible."
+                break;
+                case error.TIMEOUT:
+                    x.innerHTML = "Se acabo el tiempo de espera para realizar la peticion."
+                break;
+                case error.UNKNOWN_ERROR:
+                    x.innerHTML = "Ocurrio un error inesperado."
+                break;
+            }
+        }
+    </script>
+
 </body>
 </html>
