@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05 - HTML con algunas funcionalidades JS</title>
+    <!--Si bien ya se hizo algo con JS en el 04index.html, ahora se utilizan algunas funciones mas avanzadas-->
+    
+    <style>
+        #div1, #div2, #div3 {
+          width: 200px;
+          height: 200px;
+          padding: 10px;
+          border: 1px solid #aaaaaa;
+        }
+    </style>
+    
+    <script>
+        //funcion para definir que hace cuando se draggea un elemento. dataTransfer.setData setea el tipo y el valor del elemento
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+        //funcion para evitar el default que no permite draggear a un elemento.
+        function allowDrop(ev){
+            ev.preventDefault();
+        }
+        //funcion para soltar el drag (drop) sobre el elemento final. Evitamos el default, obtenemos el id seteado anteriormente y lo appendamos al elemento.
+        function drop(ev){
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+        }
+        function chequeo(){
+            return ((typeof(Storage)!="undefined"));
+        }
+        function chequeo2(){
+            return (localStorage.contador != "NaN");
+            
+        }
+        // Funciones para manejo de web storage en localStorage.
+        function inicializar(){
+            if (chequeo()){
+                localStorage.contador = 0;
+                document.getElementById("resultado").innerHTML = localStorage.contador;
+            }
+            else {
+                document.getElementById("resultado").innerHTML = "No hay almacenamiento compatible";
+            }
+        }
+
+        function sumar(){
+            if (chequeo2()){
+                if (chequeo()){
+                    localStorage.contador = Number(localStorage.contador) + 1;
+                    document.getElementById("resultado").innerHTML = localStorage.contador;
+                }
+                else {
+                    document.getElementById("resultado").innerHTML = "No hay almacenamiento compatible";
+                }
+            }
+            else { document.getElementById("resultado").innerHTML = "No fue inicializada la variable";}   
+        }
+
+        function restar(){
+            if (chequeo2()){
+                if (chequeo()){
+                    localStorage.contador = Number(localStorage.contador) - 1;
+                    document.getElementById("resultado").innerHTML = localStorage.contador;
+                }
+                else {
+                    document.getElementById("resultado").innerHTML = "No hay almacenamiento compatible";
+                }
+            }
+            else { document.getElementById("resultado").innerHTML = "No fue inicializada la variable";}
+        }
+
+        function liberar(){
+            localStorage.removeItem("contador");
+            document.getElementById("resultado").innerHTML = "Variable liberada";
+        }
+
+        // Funciones para manejo de web storage usando sessionStorage
+
+        function chequeo3(){
+            return (sessionStorage.contador != "NaN");
+            
+        }
+    
+        function inicializar2(){
+            if (chequeo()){
+                sessionStorage.contador = 0;
+                document.getElementById("resultado2").innerHTML = sessionStorage.contador;
+            }
+            else {
+                document.getElementById("resultado2").innerHTML = "No hay almacenamiento compatible";
+            }
+        }
+
+        function sumar2(){
+            if (chequeo3()){
+                if (chequeo()){
+                    sessionStorage.contador = Number(sessionStorage.contador) + 1;
+                    document.getElementById("resultado2").innerHTML = sessionStorage.contador;
+                }
+                else {
+                    document.getElementById("resultado2").innerHTML = "No hay almacenamiento compatible";
+                }
+            }
+            else { document.getElementById("resultado2").innerHTML = "No fue inicializada la variable";}   
+        }
+
+        function restar2(){
+            if (chequeo3()){
+                if (chequeo()){
+                    sessionStorage.contador = Number(sessionStorage.contador) - 1;
+                    document.getElementById("resultado2").innerHTML = sessionStorage.contador;
+                }
+                else {
+                    document.getElementById("resultado2").innerHTML = "No hay almacenamiento compatible";
+                }
+            }
+            else { document.getElementById("resultado2").innerHTML = "No fue inicializada la variable";}
+        }
+
+    </script>
+</head>
+<body>
+    
+    <!--Ejemplo DRAG & DROP-->
+    <!--Creo dos divs a donde va a draggearse-->
+    <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <br>
+    <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <br>
+    <div id="div3" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <img id="drag1" src="images/coco.png" width="200px" draggable="true" ondragstart="drag(event)">
+        <!--tengo que hacerlo draggable, y definir que hace cuando se lo dragguea:funcion-->
+    </div>
+
+    <!--Ejemplo WEB STORAGE-->
+    <div>
+        <p>WEB STORAGE: localStorage</p>
+        <button id="click" onclick="inicializar()">Reiniciar contador</button>
+        <button id="click2" onclick="sumar()">+1</button>
+        <button id="click3" onclick="restar()">-1</button>
+        <br><br>
+        <div id="resultado"></div>
+        <br>
+        <button id="click4" onclick="liberar()">Liberar variable</button>
+    </div>
+    <br>
+    <div>
+        <p>WEB STORAGE: sessionStorage</p>
+        <button id="click5" onclick="inicializar2()">Reiniciar contador</button>
+        <button id="click6" onclick="sumar2()">+1</button>
+        <button id="click7" onclick="restar2()">-1</button>
+        <br><br>
+        <div id="resultado2"></div>
+    </div>
+    
+    
+</body>
+</html>
