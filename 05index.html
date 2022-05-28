@@ -123,6 +123,36 @@
             }
             else { document.getElementById("resultado2").innerHTML = "No fue inicializada la variable";}
         }
+        //FUNCIONES PARA WEB WORKERS
+        var w;
+        function initwebworker(){
+            if (typeof(Worker) !== "undefined"){        //si es soportado por el browser. NOTA: CORRERLO EN LOCALHOST, Chrome no permite si es por archivo
+                if (typeof(w) == "undefined") {         //si ya no esta creado, lo creamos.
+                    w = new Worker("webworker_test1.js");
+                }
+                w.onmessage = function(event){
+                    document.getElementById("resultado3").innerHTML = event.data;
+                    };
+            } else {
+                document.getElementById("resultado3").innerHTML = "El web worker no esta soportado en este navegador";
+            }
+        }
+
+        function finitworker(){
+            w.terminate();
+            w = undefined;
+        }
+                
+        function actualizacionserver(){
+            if(typeof(EventSource) !== "undefined") {
+                var source = new EventSource("ServerSentEvent.php");
+                source.onmessage = function(event) {
+                document.getElementById("resultado4").innerHTML += event.data + "<br>";
+                };
+            } else {
+                document.getElementById("resultado4").innerHTML = "El navegador no soporta Server Side Events";
+            }
+        }
 
     </script>
 </head>
@@ -138,7 +168,7 @@
         <img id="drag1" src="images/coco.png" width="200px" draggable="true" ondragstart="drag(event)">
         <!--tengo que hacerlo draggable, y definir que hace cuando se lo dragguea:funcion-->
     </div>
-
+    <br><hr><br>
     <!--Ejemplo WEB STORAGE-->
     <div>
         <p>WEB STORAGE: localStorage</p>
@@ -159,7 +189,21 @@
         <br><br>
         <div id="resultado2"></div>
     </div>
-    
+    <br><hr><br>
+    <div>
+        <p>WEB WORKERS: Ejemplo con contador automatico</p>
+        <button onclick="initwebworker()">Iniciar Web Worker</button>
+        <button onclick="finitworker()">Finalizar Web Worker</button>
+        <br>
+        <p>Numeros contabilizados automaticamente por el web worker: <output id="resultado3"></output></p>
+        <p><b>NOTA: </b>Correr este archivo a traves de localhost o server. Si se abre directamente desde un archivo el web worker no funciona en Chrome por motivos de seguridad</p>
+    </div>
+    <hr><br>
+    <div>
+        <p>SSE: Server Sent Events. Ejemplo usando archivo externo con PHP</p>
+        <button onclick="actualizacionserver()">Iniciar actualizacion</button>
+        <p>Actualizacion desde el servidor: <br><output id="resultado4"></output></p>
+    </div>
     
 </body>
 </html>
