@@ -4,9 +4,44 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>06 INDEX</title>
+    <link rel="icon" type="image/x-icon" href="images/coco.png">
+    <title>06 INDEX - Canvas con HTML y JS</title>
+    
 </head>
 <body>
-    
+    <!--Primero marcamos la zona donde estaran los dibujos-->
+    <canvas id="canvasPrueba" width="500" height="500" style="border:1px solid #1a8d23;">El navegador no soporta canvas</canvas>
+    <br>
+    <button onclick="circulo()">Dibujar circulo</button>
+    <button onclick="linea()">Dibujar linea</button>
+    <button onclick="strokeText()">Dibujar texto</button>
+
+
+    <script>
+        function circulo(){
+            var c = document.getElementById("canvasPrueba");
+            var ctx = c.getContext("2d");
+
+            ctx.beginPath();
+            ctx.arc(95,95,40,0,2*Math.PI);
+            ctx.stroke();
+        }
+        function linea(){
+            var c = document.getElementById("canvasPrueba");
+            var ctx = c.getContext("2d");
+
+            ctx.moveTo(200,65);
+            ctx.lineTo(300,130);
+            ctx.stroke();
+        }
+        function strokeText(){
+            var c = document.getElementById("canvasPrueba");
+            var ctx = c.getContext("2d");
+
+            ctx.font = "30px Arial";
+            ctx.strokeText("Hola!",400,95);
+        }
+        
+    </script>
 </body>
 </html>
