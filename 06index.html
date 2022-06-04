@@ -10,13 +10,62 @@
 </head>
 <body>
     <!--Primero marcamos la zona donde estaran los dibujos-->
+    <p>Graficos dibujados con CANVAS:</p>
     <canvas id="canvasPrueba" width="500" height="500" style="border:1px solid #1a8d23;">El navegador no soporta canvas</canvas>
+    <img id="img1" src="images/coco.png" alt="Logo Coco" width="200px" style="padding:50px;">
     <br>
-    <button onclick="circulo()">Dibujar circulo</button>
-    <button onclick="linea()">Dibujar linea</button>
-    <button onclick="strokeText()">Dibujar texto</button>
+    <p>Elegir lo que se dibuje o realice en el rectangulo</p>
+    <br>
+    <button onclick="circulo()">Circulo</button>
+    <button onclick="linea()">Linea</button>
+    <button onclick="strokeText()">Texto</button>
+    <button onclick="gradienteRectangular()">Grad Rectangular</button>
+    <button onclick="gradienteRadial()">Grad Radial</button>
+    <button onclick="usarImagen()">Traslado Imagen</button>
+    <br><br>
+    <hr>
+    <br>
+    <!--Hacemos algunos graficos con otro metodo: SVG-->
+    <p>Graficos dibujados con SVG</p>
+    <p><em>CIRCULO</em> centro verde, borde amarillo</p>
+    <svg width="100" height="100">
+        <circle cx="50" cy="50" r="40" stroke="yellow" stroke-width="4" fill="green" />
+    </svg>
+    <!--Puedo definir mas en el style-->
+    <p><em>RECTANGULO</em> azul con borde negro</p>
+    <svg width="300" height="100">
+        <rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:10;stroke:rgb(0,0,0)" />
+    </svg>
+    <!--Tambien hay ciertos attrs que puedo usar, como por ej el rx y ry del rect-->
+    <p>Rectangulo con un poco mas de estilo, y redondeado con attrs propios del rect</p>
+    <svg width="400" height="180">
+        <rect x="50" y="20" rx="20" ry="20" width="150" height="150" style="fill:red;stroke:black;stroke-width:5;opacity:0.5" />
+    </svg>
+    <!--Un logo complejo, con gradiente y todo-->
+    <p><b>Simil LOGOTIPO</b> con texto, elipse y gradiente</p>
+    <svg height="130" width="500">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:rgb(29, 197, 43);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgb(185, 179, 7);stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <ellipse cx="100" cy="70" rx="85" ry="55" fill="url(#grad1)" />
+        <text fill="#ffffff" font-size="45" font-family="Verdana" x="27" y="86">TEXTO</text>
+        Si esto se ve es porque el navegador no admite inline SVG.
+    </svg>
+    <br><br>
+    <hr>
+    <br><br>
+    <!--Muestro mapa de Google Maps usando API, script JS y algo de inlineCSS para styling-->
+    <p style="text-align:center;"><b>GOOGLE MAP</b> agregado por script js y html</p>
+    <div id="googleMap" style="width:100%;height:400px;"></div>
+    <br><br>
+    <hr>
+    <br><br>
 
 
+    <!--Scripts usados para el dibujado con CANVAS y API de Google Maps-->
     <script>
         function circulo(){
             var c = document.getElementById("canvasPrueba");
@@ -41,7 +90,114 @@
             ctx.font = "30px Arial";
             ctx.strokeText("Hola!",400,95);
         }
+
+        function gradienteRectangular(){
+            var c = document.getElementById("canvasPrueba");
+            var ctx = c.getContext("2d");
+
+            // Creo el gradiente
+            var grd = ctx.createLinearGradient(100, 300, 200, 400);
+            grd.addColorStop(0, "green");
+            grd.addColorStop(1, "white");
+
+            // Relleno con el gradiente
+            ctx.fillStyle = grd;
+            ctx.fillRect(50, 300, 150, 200);
+        }
+
+        function gradienteRadial(){
+            var c = document.getElementById("canvasPrueba");
+            var ctx = c.getContext("2d");
+
+            //Idem anterior, creo el gradiente primero
+            var grd = ctx.createRadialGradient(100, 500, 300, 300, 40, 100);
+            grd.addColorStop(0,"green");
+            grd.addColorStop(1,"white");
+
+            //Y lo relleno
+            ctx.fillStyle = grd;
+            ctx.fillRect(300, 300, 150, 100);
+        }
+
+        function usarImagen(){
+            var c = document.getElementById("canvasPrueba");
+            var ctx = c.getContext("2d");
+            var d = document.getElementById("img1");
+            //Una vez que obtengo la imagen externa lo "dibujo" dentro del canvas
+            ctx.drawImage(d,10,10);
+        }
+
+        //Funcion para definir propiedades y mapa de Google Maps a mostrar
+        function mapaGoogle(){{
+            var mapProps = {
+                //posicion aleatoria por el norte de BsAs, delta etc..
+                center: new google.maps.LatLng(-33.9243226,-58.9798238),
+                zoom:5,
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"),mapProps);
+            //La API nos permite agregar por ej marcadores animados.
+            var marker = new google.maps.Marker({
+                position:mapProps.center,
+                animation:google.maps.Animation.BOUNCE
+                });
+            var marker2 = new google.maps.Marker({
+                position:new google.maps.LatLng(-33.9243226,-55.9798238),
+                //animation:google.maps.Animation.BOUNCE
+                });
+            marker.setMap(map);
+            marker2.setMap(map);
+            //Tambien puedo definir rutas, una linea directa entre dos o mas puntos. si vuelvo a colocar el primero se cierra el "poligono"
+            var myTrip = [marker.getPosition(),marker2.getPosition(), new google.maps.LatLng(-35.9243226,-58.9798238)];
+            var flightPath = new google.maps.Polyline({
+                path:myTrip,
+                strokeColor:"#0000FF",
+                strokeOpacity:0.8,
+                strokeWeight:1
+                });
+            flightPath.setMap(map);
+            //Puedo agregar una ventana con un texto que quiera a modo informativo, sumo un link a modo de prueba
+            var infowindow = new google.maps.InfoWindow({content:"Hola! Soy una caja de informacion <a href='#'>sin informacion</a> pero con un link"});
+            infowindow.open(map,marker);
+            
+            // Puedo realizar acciones, como que si el user clickea en el marcador haga zoom hasta ahi, y luego de 5 segundos vuelva al zoom original
+            google.maps.event.addListener(marker,'click',function() {
+                var pos = map.getZoom();
+                map.setZoom(9);
+                map.setCenter(marker.getPosition());
+                window.setTimeout(function() {map.setZoom(pos);},5000);
+                });
+            
+            // Tambien que al clickear en un marcador se abra una ventana de info
+            var infowindow = new google.maps.InfoWindow({
+                    content:"Puntero 2"
+                });
+            google.maps.event.addListener(marker2, 'click', function() {
+                    infowindow.open(map,marker2);
+                });
+
+            // Puedo hacer que cuando un usuario clickee en alguna posicion del mapa se cree un marcador y se abra una ventana informando la posicion
+
+            google.maps.event.addListener(map, 'click', function(event) {
+                    placeMarker(map, event.latLng);
+                });
+
+            function placeMarker(map, location) {
+                var marker3 = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content: 'Latitud: ' + location.lat() +
+                    '<br>Longitud: ' + location.lng()
+                });
+                infowindow.open(map,marker3);
+                }
+        }}
         
     </script>
+    <!--Uso key propia de Google API para mostrar mapa-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-WExbbTd8O4DE8kKvp8D6S67ebS2WF7o&callback=mapaGoogle"></script>
+
+
 </body>
 </html>
