@@ -37,6 +37,9 @@
             } ,
             clear : function() {    //la funcion clear limpia todo el contenido del canvas
                 this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            } ,
+            stop : function() {
+                clearInterval(this.interval);   // usamos este metodo para limpiar el intervalo en el caso que choquen los componentes (game over)
             }
         }
         var myGamePiece; //Necesitamos un generador de componentes para poder agregarlos al juego y utilizar sus propiedades, que sera a traves de la var myGamePiece
@@ -64,21 +67,41 @@
                 this.x += this.speedX;
                 this.y += this.speedY;
             }
+            this.crashWith = function(otherObj){    //funcion para chequear los limites de este obj y el otro, y si hubo o no choque
+                var myLeft = this.x;
+                var myRight = this.x + (this.width);
+                var myTop = this.y;
+                var myBottom = this.y + (this.height);
+                var otherLeft = otherObj.x;
+                var otherRight = otherObj.x + (otherObj.width);
+                var otherTop = otherObj.y;
+                var otherBottom = otherObj.y + (otherObj.height);
+                var crash = true;
+                if ((myBottom < otherTop) || (myTop > otherBottom) || (myRight < otherLeft) || (myLeft > otherRight)){
+                    crash = false;
+                }
+                return crash;
+            }
             
         }
 
         function updateGameArea(){
-            myGameArea.clear();
-            myObstacle.update();
-            //myGamePiece.x += 1;   //podemos hacer mover los componentes automaticamente
-            myGamePiece.speedX = 0;
-            myGamePiece.speedY = 0;
-            if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -1;}  //para que cuando teclee las flechas se mueva el objeto
-            if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 1;}
-            if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedY = -1;}
-            if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedY = 1;}
-            myGamePiece.newPos();
-            myGamePiece.update();
+            if (myGamePiece.crashWith(myObstacle)){ // Lo que primero chequeamos es si choco con otro objeto
+                myGameArea.stop();
+            } else {
+                myGameArea.clear();
+                myObstacle.x += -1;
+                myObstacle.update();
+                //myGamePiece.x += 1;   //podemos hacer mover los componentes automaticamente
+                myGamePiece.speedX = 0;
+                myGamePiece.speedY = 0;
+                if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -1;}  //para que cuando teclee las flechas se mueva el objeto
+                if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 1;}
+                if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedY = -1;}
+                if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedY = 1;}
+                myGamePiece.newPos();
+                myGamePiece.update();
+                }
         }
 
         function moverArriba(){
