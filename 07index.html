@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="images/coco.png">
+    <title>07 - GAME in HTML, CSS & JS</title>
+    <!--Este archivo va a contener un mini videojuego sencillo con HTML, algo de CSS para sus estilos y JS para su funcionamiento-->
+</head>
+<!--Primero necesitamos crear el area de juego, un simple rectangulo-->
+<style>
+    canvas {
+        border: 1px solid #d3d3d3;
+        background-color: #f1f1f1;
+    }
+</style>
+<!--Ni bien cargue el body va a iniciar el juego..-->
+<body onload="startGame()">
+
+    <script>
+        var myGameArea = {  //definimos que es el area de juego y como construirse cuando comience
+            canvas : document.createElement("canvas"),
+            start : function() {
+                this.canvas.width = 480;
+                this.canvas.height = 270;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.interval = setInterval(updateGameArea, 20);    // Hacemos que llame a la funcion updateGameArea cada 20ms, lo que serian 50fps
+                window.addEventListener('keydown',function(e){ //agregamos un eventlistener para que cuando se teclee se copie el codigo al objeto
+                    myGameArea.keys = (myGameArea.keys || []);
+                    myGameArea.keys[e.keyCode] = true;
+                })
+                window.addEventListener('keyup',function(e){//y se ponga en false cuando se levanta la tecla
+                    myGameArea.keys[e.keyCode] = false;
+                })
+            } ,
+            clear : function() {    //la funcion clear limpia todo el contenido del canvas
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+        var myGamePiece; //Necesitamos un generador de componentes para poder agregarlos al juego y utilizar sus propiedades, que sera a traves de la var myGamePiece
+        var myObstacle; //creamos el obstaculo
+
+        function startGame() {  //Esta funcion va a crear el area de juego, y agregaremos los componentes necesarios
+            myGamePiece = new component(30,30,"purple",10,10);
+            myObstacle = new component(10, 200, "green", 300, 120);
+            myGameArea.start();
+        }
+
+        function component(ancho,alto,color,x,y){
+            this.width = ancho;
+            this.height = alto;
+            this.speedX = 0;            //velocidad obtenida al clickear los buttons
+            this.speedY = 0;
+            this.x = x;                 //pos en x
+            this.y = y;                 //pos en y
+            this.update = function(){   //lo siguiente lo hace solo al actualizarse, de acuerdo a los valores actuales del juego
+                ctx = myGameArea.context;   //usando canvas para determinar el mismo tipo de contexto que el area de juego
+                ctx.fillStyle = color;      //usando canvas, relleno el color
+                ctx.fillRect(this.x,this.y,this.width,this.height); //lo "convierto" a un objeto de canvas
+            }
+            this.newPos = function(){   //uso esta funcion para ir moviendo los valores x e y de acuerdo a la velocidad que voy teniendo
+                this.x += this.speedX;
+                this.y += this.speedY;
+            }
+            
+        }
+
+        function updateGameArea(){
+            myGameArea.clear();
+            myObstacle.update();
+            //myGamePiece.x += 1;   //podemos hacer mover los componentes automaticamente
+            myGamePiece.speedX = 0;
+            myGamePiece.speedY = 0;
+            if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -1;}  //para que cuando teclee las flechas se mueva el objeto
+            if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 1;}
+            if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedY = -1;}
+            if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedY = 1;}
+            myGamePiece.newPos();
+            myGamePiece.update();
+        }
+
+        function moverArriba(){
+            myGamePiece.speedY = -1;
+        }
+
+        function moverAbajo(){
+            myGamePiece.speedY = 1;
+        }
+
+        function moverIzquierda(){
+            myGamePiece.speedX = -1;
+        }
+
+        function moverDerecha(){
+            myGamePiece.speedX = 1;
+        }
+        //Necesitamos una funcion para que deje de moverse para que no se vaya infinitamente sin parar
+        function stopMovimiento(){
+            myGamePiece.speedX = 0;
+            myGamePiece.speedY = 0;
+        }
+
+        function clearGameArea(){
+            myGameArea.clear();
+            myGamePiece.x = 10;
+            myGamePiece.y = 10;
+            myGamePiece.speedX = 0;
+            myGamePiece.speedY = 0;
+        }
+        
+        </script>
+
+    <br>
+    <!--Creamos botones para mover el objeto-->
+    
+    <p style="font-family:'Courier';font-size:14px;">Moviendo con las teclas se controla el movimiento del objeto</p>
+    <button onclick="clearGameArea()">Reiniciar</button>
+    <br><br><hr><br><br>
+    <p style="font-family:'Courier';font-size:14px;"><span style="text-decoration:line-through;">Clickeando en cada boton se controla el movimiento del objeto</span> Ya no funciona, se cambio al movimiento con el teclado</span></p>
+    <div style="text-align:center; width:480px;">   <!--Usamos onmousedown en lugar de onclick para poder definir cuando se detiene al levantar el click, y el ontouchstart para dispositivos moviles-->
+        <button onmousedown="moverArriba()" onmouseup="stopMovimiento()" ontouchstart="moverArriba()">Arriba</button><br><br>
+        <button onmousedown="moverIzquierda()" onmouseup="stopMovimiento()" ontouchstart="moverIzquierda()">Izquierda</button>
+        <button onmousedown="moverDerecha()" onmouseup="stopMovimiento()" ontouchstart="moverDerecha()">Derecha</button><br><br>
+        <button onmousedown="moverAbajo()" onmouseup="stopMovimiento()" ontouchstart="moverAbajo()">Abajo</button>
+    </div>
+    
+
+</body>
+</html>
