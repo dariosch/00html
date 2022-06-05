@@ -26,6 +26,7 @@
                 this.canvas.height = 270;
                 this.context = this.canvas.getContext("2d");
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.frameNo = 0;   //usamos esto para contar la cantidad de frames
                 this.interval = setInterval(updateGameArea, 20);    // Hacemos que llame a la funcion updateGameArea cada 20ms, lo que serian 50fps
                 window.addEventListener('keydown',function(e){ //agregamos un eventlistener para que cuando se teclee se copie el codigo al objeto
                     myGameArea.keys = (myGameArea.keys || []);
@@ -43,15 +44,18 @@
             }
         }
         var myGamePiece; //Necesitamos un generador de componentes para poder agregarlos al juego y utilizar sus propiedades, que sera a traves de la var myGamePiece
-        var myObstacle; //creamos el obstaculo
+        var myObstacles = []; //creamos los obstaculos. es un array para que sean multiples.
+        var myScore;    //para el puntaje
 
         function startGame() {  //Esta funcion va a crear el area de juego, y agregaremos los componentes necesarios
             myGamePiece = new component(30,30,"purple",10,10);
-            myObstacle = new component(10, 200, "green", 300, 120);
+           // myObstacle = new component(10, 200, "green", 300, 120);
+            myScore = new component("25px","Consolas","black",280,40,"text");
             myGameArea.start();
         }
 
-        function component(ancho,alto,color,x,y){
+        function component(ancho,alto,color,x,y,type){
+            this.type = type;
             this.width = ancho;
             this.height = alto;
             this.speedX = 0;            //velocidad obtenida al clickear los buttons
@@ -60,8 +64,16 @@
             this.y = y;                 //pos en y
             this.update = function(){   //lo siguiente lo hace solo al actualizarse, de acuerdo a los valores actuales del juego
                 ctx = myGameArea.context;   //usando canvas para determinar el mismo tipo de contexto que el area de juego
-                ctx.fillStyle = color;      //usando canvas, relleno el color
-                ctx.fillRect(this.x,this.y,this.width,this.height); //lo "convierto" a un objeto de canvas
+                if (this.type == "text") {  //chequeamos si es de tipo texto, ya que debera hacer otra cosa en vez de dibujar un rectangulo
+                    ctx.font = this.width + " " + this.height;
+                    ctx.fillStyle = color;
+                    ctx.fillText(this.text, this.x, this.y);
+                } else {    //en el caso que sea un rectangulo..
+                    ctx.fillStyle = color;      //usando canvas, relleno el color
+                    ctx.fillRect(this.x,this.y,this.width,this.height); //lo "convierto" a un objeto de canvas
+                }
+                
+                
             }
             this.newPos = function(){   //uso esta funcion para ir moviendo los valores x e y de acuerdo a la velocidad que voy teniendo
                 this.x += this.speedX;
@@ -86,22 +98,47 @@
         }
 
         function updateGameArea(){
-            if (myGamePiece.crashWith(myObstacle)){ // Lo que primero chequeamos es si choco con otro objeto
-                myGameArea.stop();
-            } else {
-                myGameArea.clear();
-                myObstacle.x += -1;
-                myObstacle.update();
-                //myGamePiece.x += 1;   //podemos hacer mover los componentes automaticamente
-                myGamePiece.speedX = 0;
-                myGamePiece.speedY = 0;
-                if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -1;}  //para que cuando teclee las flechas se mueva el objeto
-                if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 1;}
-                if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedY = -1;}
-                if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedY = 1;}
-                myGamePiece.newPos();
-                myGamePiece.update();
+            var x,y;
+            for (i=0;i<myObstacles.length; i += 1){
+                if (myGamePiece.crashWith(myObstacles[i])){
+                    myGameArea.stop();
+                    return;
                 }
+            }
+            myGameArea.clear();
+            myGameArea.frameNo += 1;    //contabilizaremos los frames para los obstaculos y para el puntaje
+            if (myGameArea.frameNo == 1 || everyInterval(150)){ //aleatoriamente iremos generando en cada intervalo de 150 los obstaculos de distintos sizes
+                x= myGameArea.canvas.width;
+                minHeight = 20;
+                maxHeight = 200;
+                height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+                minGap = 50;
+                maxGap = 200;
+                gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+                myObstacles.push(new component(10,height,"green", x, 0));
+                myObstacles.push(new component(10, x-height-gap, "green", x, height+gap));
+            }
+            for (i=0; i<myObstacles.length; i +=1){
+                myObstacles[i].x += -1;
+                myObstacles[i].update();
+            }
+            //myGamePiece.x += 1;   //podemos hacer mover los componentes automaticamente
+            myGamePiece.speedX = 0;
+            myGamePiece.speedY = 0;
+            if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -1;}  //para que cuando teclee las flechas se mueva el objeto
+            if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 1;}
+            if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedY = -1;}
+            if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedY = 1;}
+            myScore.text = "PUNTAJE: " + myGameArea.frameNo;
+            myScore.update();
+            myGamePiece.newPos();
+            myGamePiece.update();
+        
+        }
+
+        function everyInterval(n){  //creamos una funcion para ejecutar algo en un intervalo de frames indicado
+            if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
+            return false;
         }
 
         function moverArriba(){
