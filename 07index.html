@@ -78,7 +78,28 @@
             this.newPos = function(){   //uso esta funcion para ir moviendo los valores x e y de acuerdo a la velocidad que voy teniendo
                 this.x += this.speedX;
                 this.y += this.speedY;
+                this.hitBorders();
+            
             }
+
+            this.hitBorders = function(){   //para evitar que se vaya de los bordes
+                var rockBottom = myGameArea.canvas.height - this.height;
+                var rockDer = myGameArea.canvas.width - this.width;
+                if (this.y > rockBottom) {
+                    this.y = rockBottom;
+                }
+                if (this.y == 0){
+                    this.y = 1;   
+                }
+                if (this.x > rockDer){
+                    this.x = rockDer;
+                }
+                if (this.x == 0){
+                    this.x = 1;
+                }
+            }
+
+
             this.crashWith = function(otherObj){    //funcion para chequear los limites de este obj y el otro, y si hubo o no choque
                 var myLeft = this.x;
                 var myRight = this.x + (this.width);
@@ -162,21 +183,13 @@
             myGamePiece.speedY = 0;
         }
 
-        function clearGameArea(){
-            myGameArea.clear();
-            myGamePiece.x = 10;
-            myGamePiece.y = 10;
-            myGamePiece.speedX = 0;
-            myGamePiece.speedY = 0;
-        }
-        
         </script>
 
     <br>
     <!--Creamos botones para mover el objeto-->
     
     <p style="font-family:'Courier';font-size:14px;">Moviendo con las teclas se controla el movimiento del objeto</p>
-    <button onclick="clearGameArea()">Reiniciar</button>
+    <button onclick="startGame()">Reiniciar</button>
     <br><br><hr><br><br>
     <p style="font-family:'Courier';font-size:14px;"><span style="text-decoration:line-through;">Clickeando en cada boton se controla el movimiento del objeto</span> Ya no funciona, se cambio al movimiento con el teclado</span></p>
     <div style="text-align:center; width:480px;">   <!--Usamos onmousedown en lugar de onclick para poder definir cuando se detiene al levantar el click, y el ontouchstart para dispositivos moviles-->
