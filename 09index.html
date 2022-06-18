@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="images/coco.png">
+    <title>09 - Ejemplos y pruebas con HTML, XML y JS</title>
+    <!--Se listan algunos ejemplos de utilizacion de info almacenada en XML-->
+</head>
+<body>
+    <h4>Coleccion de CDs de Ejemplo</h4>
+    <button type="button" onclick="cargarXML()">Cargar coleccion</button>
+
+    <p id="demo"></p>
+
+    <script>
+        
+        function cargarXML(){
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function(){
+                if (this.readyState == 4 && this.status == 200){    //si esta listo para responder
+                    obtenerInfo(this);
+                }
+            };
+            xmlhttp.open("GET", "listadocds.xml", true);        //usando metodo GET obtenemos la info del xml externo
+            xmlhttp.send();
+        }
+        
+        function obtenerInfo(xml){
+            var x,i,xmlDoc,txt;
+            xmlDoc = xml.responseXML;
+            txt = "";
+            x = xmlDoc.getElementsByTagName("ARTIST");          // en este caso obtenemos solo los artistas, por ese tag del XML
+            for(i = 0; i < x.length; i++){
+                txt += x[i].childNodes[0].nodeValue + "<br>";   //formamos una cadena de texto con cada resultado que encuentre con el tag ese.
+            }
+            document.getElementById("demo").innerHTML = txt;
+        }
+        
+        
+    </script>
+
+</body>
+</html>
