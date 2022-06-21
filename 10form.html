@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="images/coco.png">
+    <title>10 - Formulario Basico HTML-ONLY</title>
+    <!--Formulario basico solo con HTML-->
+</head>
+<body>
+    <div style="text-align: center;">
+        <h1>Formulario basico <span style="font-weight: 700;">HTML-ONLY</span></h1>
+        <form action="#">
+            <input type="text" name="nombre" id="nombre" placeholder="Ingrese nombre/s"><br><br>
+            <input type="text" name="apellido" id="apellido" placeholder="Ingrese apellido/s"><br><br>
+            Ingrese donde vive:
+            <input type="radio" name="dondeVive" id="radioArg" value="1">Argentina
+            <input type="radio" name="dondeVive" id="radioSd" value="2">Resto de Sudamerica
+            <input type="radio" name="dondeVive" id="radioWorld" value="3">Resto del Mundo<br><br>
+            Tiene planeado viajar en los proximos meses?
+            <input type="checkbox" name="checkSi" id="checkSi">Si
+            <input type="checkbox" name="checkNS" id="checkNS">NS/NC
+            <input type="checkbox" name="checkNo" id="checkNo">No<br><br>
+            Cual fue su ultimo viaje?
+            <select name="viaje"><option></option>
+                <option value="1">Dentro de Argentina</option>
+                <option value="2">Paises limitrofes</option>
+                <option value="3">Resto de America</option>
+                <option value="4">Resto del Mundo</option>
+            </select> <br><br>
+            <input type="submit" value="Enviar formulario">
+        </form>
+    </div>
+    
+</body>
+</html>
